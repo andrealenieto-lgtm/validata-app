@@ -586,16 +586,16 @@ export default function Integraciones() {
             Copiar código
           </Button>
         </InlineStack>
-        <List type="number">
-          <List.Item>
+        <ol start={3} style={{ margin: 0, paddingInlineStart: 20 }}>
+          <li>
             Implementar → Nueva implementación → tipo «Aplicación web». Ejecutar
             como: «Yo». Quién tiene acceso: «Cualquier usuario». Autoriza los
             permisos.
-          </List.Item>
-          <List.Item>
+          </li>
+          <li>
             Copia la URL de la aplicación web (termina en /exec) y pégala aquí:
-          </List.Item>
-        </List>
+          </li>
+        </ol>
       </BlockStack>
       <FormLayout>
         <TextField
