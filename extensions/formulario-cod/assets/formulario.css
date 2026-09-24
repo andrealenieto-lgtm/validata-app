@@ -1,0 +1,417 @@
+/* Validata: botón y formulario contraentrega. Todo con prefijo vd- para no chocar con el tema. */
+
+.vd-cod { margin: 12px 0; }
+
+.vd-boton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--vd-fondo, #10b981);
+  color: var(--vd-texto, #fff);
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.15);
+}
+.vd-boton-texto { font-size: 1.05em; }
+.vd-boton-sub { font-size: 0.8em; font-weight: 400; opacity: 0.9; }
+.vd-animar, .vd-anim-sacudir { animation: vd-sacudir 4s ease-in-out infinite; }
+.vd-anim-pulso { animation: vd-pulso 2s ease-in-out infinite; }
+.vd-anim-rebote { animation: vd-rebote 2.5s ease-in-out infinite; }
+@keyframes vd-sacudir {
+  0%, 88%, 100% { transform: translateX(0); }
+  90%, 94%, 98% { transform: translateX(-4px); }
+  92%, 96% { transform: translateX(4px); }
+}
+@keyframes vd-pulso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@keyframes vd-rebote { 0%, 80%, 100% { transform: translateY(0); } 88% { transform: translateY(-6px); } 94% { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .vd-animar, .vd-anim-sacudir, .vd-anim-pulso, .vd-anim-rebote { animation: none; } }
+
+body.vd-abierto { overflow: hidden; }
+.vd-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 12px;
+  background: rgb(0 0 0 / 0.55);
+  overflow-y: auto;
+}
+.vd-panel {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 460px;
+  padding: 28px 20px 20px;
+  border: var(--vd-f-ancho-borde, 0) solid var(--vd-f-borde, #111);
+  border-radius: var(--vd-f-radio, 16px);
+  background: var(--vd-f-fondo, #fff);
+  color: var(--vd-f-texto, #111);
+  font-size: var(--vd-f-tamano, 15px);
+  line-height: 1.4;
+  box-shadow: var(--vd-f-sombra, 0 10px 40px rgb(0 0 0 / 0.3));
+}
+.vd-incrustado { max-width: none; margin: 12px 0; box-shadow: none; }
+.vd-preview { max-width: none; box-shadow: none; }
+.vd-negrita { font-weight: 600; }
+.vd-cursiva { font-style: italic; }
+.vd-etiquetas-izquierda .vd-campo { display: grid; grid-template-columns: 35% 1fr; align-items: center; gap: 8px; }
+.vd-etiquetas-izquierda .vd-campo > .vd-radios { grid-column: 2; }
+@media (max-width: 600px) {
+  .vd-completa-movil { padding: 0; }
+  .vd-completa-movil .vd-panel { min-height: 100%; border-radius: 0; }
+}
+.vd-panel * { box-sizing: border-box; }
+.vd-cerrar {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  border: 0;
+  background: none;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+}
+
+.vd-form { display: flex; flex-direction: column; gap: 12px; }
+
+.vd-producto { display: flex; align-items: center; gap: 12px; }
+.vd-producto img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+.vd-producto-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.vd-producto-info small { color: #666; }
+.vd-precio { font-weight: 700; }
+.vd-cantidad { display: flex; align-items: center; gap: 8px; }
+.vd-cantidad button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.vd-resumen { border: 1px solid var(--vd-c-borde, #111); border-radius: 8px; padding: 10px 14px; }
+.vd-resumen div { display: flex; justify-content: space-between; padding: 3px 0; }
+.vd-total { border-top: 1px solid #ddd; margin-top: 4px; padding-top: 8px !important; font-weight: 700; font-size: 17px; }
+
+.vd-texto { margin: 0; }
+.vd-imagen { width: 100%; border-radius: 8px; }
+
+.vd-label { display: block; font-weight: 600; margin-bottom: 4px; }
+.vd-req { color: #d72c0d; }
+.vd-control { display: flex; border: 1px solid var(--vd-c-borde, #111); border-radius: var(--vd-c-radio, 0); overflow: hidden; }
+.vd-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  background: var(--vd-c-fondo-icono, #eee);
+  color: var(--vd-c-icono, #111);
+  border-right: 1px solid var(--vd-c-borde, #111);
+}
+.vd-control input, .vd-campo > select {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 0;
+  font: inherit;
+  font-size: 16px; /* evita el zoom automático de iOS */
+  background: var(--vd-c-fondo, #fff);
+  color: var(--vd-c-texto, #111);
+}
+.vd-campo > select { border: 1px solid var(--vd-c-borde, #111); border-radius: var(--vd-c-radio, 0); }
+.vd-radios { display: flex; flex-direction: column; gap: 6px; }
+.vd-radios label { display: flex; align-items: center; gap: 8px; }
+.vd-invalido, .vd-control:has(.vd-invalido) { outline: 2px solid #d72c0d; }
+
+.vd-validacion {
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fffbea;
+  border: 1px solid #f1c21b;
+  /* Fondo claro propio: texto oscuro fijo para que se lea con cualquier plantilla. */
+  color: #1f2937;
+  font-size: 14px;
+}
+.vd-validacion p { margin: 0; }
+.vd-cargando { background: #f4f6f8; border-color: #ccc; }
+.vd-contraentrega { background: #ecfdf3; border-color: #34c759; }
+.vd-contraentrega .vd-mensaje { color: #0f7b3f; font-weight: 700; }
+.vd-pago_previo { background: #fff7e6; border-color: #f59e0b; }
+.vd-whatsapp { background: #fdecea; }
+.vd-validacion.vd-whatsapp { border-color: #e5484d; }
+.vd-error { background: #fdecea; border-color: #e5484d; }
+.vd-mensaje { font-weight: 600; }
+.vd-huella { margin-top: 4px !important; color: #555; }
+.vd-huella-detalle { font-size: 13px; color: #555; }
+.vd-opcion {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #1f2937;
+  cursor: pointer;
+}
+.vd-opcion span { display: flex; flex-direction: column; }
+.vd-opcion small { color: #555; }
+a.vd-whatsapp {
+  display: block;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #25d366;
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.vd-enviar {
+  padding: 16px;
+  border: 0;
+  border-radius: var(--vd-e-radio, 999px);
+  background: var(--vd-e-fondo, linear-gradient(90deg, #60a5fa, #2563eb));
+  color: var(--vd-e-texto, #fff);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.vd-enviar:disabled { opacity: 0.6; cursor: wait; }
+.vd-aviso { margin: 0; color: #d72c0d; font-size: 14px; min-height: 1em; }
+
+.vd-gracias { text-align: center; padding: 20px 0; }
+.vd-gracias h2 { margin: 0 0 8px; }
+
+/* ─── Ofertas por cantidad (estilo Kaching) ─── */
+.vd-oferta { margin: 4px 0 12px; color: var(--vd-o-texto, #111); }
+.vd-oferta * { box-sizing: border-box; }
+.vd-oferta-titulo { margin: 0 0 8px; font-weight: 700; text-align: center; }
+.vd-niveles { display: flex; flex-direction: column; gap: 10px; }
+.vd-oferta-tarjetas .vd-niveles { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; }
+.vd-nivel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+  border: 2px solid #d9d9d9;
+  border-radius: var(--vd-o-radio, 12px);
+  background: var(--vd-o-fondo, #fff);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.vd-oferta-tarjetas .vd-nivel { flex-direction: column; text-align: center; padding-top: 20px; }
+.vd-nivel-activo { border-color: var(--vd-o-principal, #10b981); background: var(--vd-o-fondo-sel, #ecfdf5); }
+.vd-nivel input { accent-color: var(--vd-o-principal, #10b981); width: 18px; height: 18px; margin: 0; flex: none; }
+.vd-nivel-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.vd-nivel-info small { opacity: 0.75; }
+.vd-nivel-precio { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.vd-oferta-tarjetas .vd-nivel-precio { align-items: center; text-align: center; }
+.vd-nivel-precio s { opacity: 0.55; font-size: 0.85em; }
+.vd-nivel-precio small { opacity: 0.7; font-size: 0.75em; }
+.vd-nivel-etiqueta {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--vd-o-etiqueta, #10b981);
+  color: var(--vd-o-texto-etiqueta, #fff);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.vd-oferta-tarjetas .vd-nivel-etiqueta {
+  right: 50%;
+  transform: translateX(50%);
+  width: max-content;
+  max-width: 92%;
+  padding: 2px 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+}
+/* Espacio arriba para la insignia cuando ocupa dos líneas. */
+.vd-oferta-tarjetas .vd-niveles { padding-top: 12px; }
+.vd-descuento span:last-child { color: #d72c0d; font-weight: 600; }
+
+/* ─── Paquetes (combos) ─── */
+.vd-paquete-opcion { align-items: flex-start; min-width: 0; }
+.vd-paquete-cuerpo { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.vd-paquete-cabecera { display: flex; align-items: flex-start; gap: 8px; }
+.vd-paquete-productos {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--vd-o-principal, #10b981);
+  border-radius: calc(var(--vd-o-radio, 12px) - 4px);
+  background: var(--vd-o-fondo, #fff);
+  /* Con 4-5 productos no caben en un celular: se deslizan hacia los lados. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.vd-paquete-horizontal .vd-paquete-producto { min-width: 72px; }
+.vd-paquete-vertical { flex-direction: column; }
+.vd-paquete-producto { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; min-width: 0; }
+.vd-paquete-vertical .vd-paquete-producto { flex-direction: row; text-align: left; gap: 8px; }
+.vd-paquete-producto img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; }
+.vd-paquete-nombre { font-size: 12px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.vd-paquete-vertical .vd-paquete-nombre { flex: 1; }
+.vd-paquete-producto s { opacity: 0.55; font-size: 0.8em; }
+.vd-paquete-mas {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--vd-o-principal, #10b981);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ─── Upsells de 1 casilla (1-Tick) ─── */
+.vd-ticks { display: flex; flex-direction: column; gap: 8px; }
+.vd-ticks:empty { display: none; }
+.vd-tick {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 2px var(--vd-t-estilo, dashed) var(--vd-t-borde, #0eda52);
+  border-radius: 10px;
+  background: var(--vd-t-fondo, #f6fff4);
+  cursor: pointer;
+  font-weight: 600;
+}
+.vd-tick input { accent-color: var(--vd-t-marca, #1579ff); width: 20px; height: 20px; flex: none; margin: 0; }
+
+/* ─── Capas sobre el formulario: upsell y downsell ─── */
+.vd-capa {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+  border-radius: inherit;
+  background: rgb(0 0 0 / 0.45);
+  overflow-y: auto;
+}
+.vd-upsell-caja, .vd-downsell-caja {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 8px;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vd-upsell-caja { background: var(--vd-u-fondo, #fff); color: var(--vd-u-texto, #111); }
+.vd-upsell-caja h3, .vd-downsell-caja h3 { margin: 0; font-size: 1.35em; }
+.vd-upsell-caja p, .vd-downsell-caja p { margin: 0; }
+.vd-upsell-reloj { padding: 10px; border: 1px solid #ffacac; border-radius: 10px; background: #fdf6f6; color: #e5484d; font-weight: 700; font-size: 1.1em; }
+.vd-upsell-caja img { width: 100%; max-height: 240px; object-fit: contain; border-radius: 8px; }
+.vd-upsell-titulo { font-size: 1.15em; }
+.vd-upsell-etiqueta { align-self: center; padding: 4px 14px; border-radius: 8px; background: linear-gradient(90deg, #6366f1, #ec4899); color: #fff; font-weight: 700; font-size: 1.1em; }
+.vd-upsell-precio { display: flex; gap: 10px; justify-content: center; align-items: baseline; }
+.vd-upsell-precio s { opacity: 0.6; }
+.vd-upsell-precio strong { font-size: 1.35em; }
+.vd-upsell-si, .vd-downsell-si { padding: 14px; border: 0; border-radius: 8px; font: inherit; font-weight: 700; cursor: pointer; }
+.vd-upsell-si { background: var(--vd-u-principal, #111); color: #fff; }
+.vd-upsell-no, .vd-downsell-no { padding: 13px; border: 1px solid currentColor; border-radius: 8px; background: #fff; color: #111; font: inherit; cursor: pointer; }
+.vd-downsell-caja { background: var(--vd-d-fondo, #fde68a); color: var(--vd-d-texto, #111); }
+.vd-downsell-desc { font-weight: 700; font-size: 1.15em; }
+.vd-downsell-insignia {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 130px;
+  margin: 6px 0;
+  background: linear-gradient(135deg, #f97316, #e11d48);
+  color: #fff;
+  clip-path: polygon(50% 0%, 61% 12%, 77% 6%, 80% 22%, 96% 26%, 90% 41%, 100% 54%, 87% 63%, 90% 79%, 74% 80%, 67% 95%, 53% 87%, 38% 97%, 31% 82%, 15% 84%, 16% 68%, 1% 60%, 11% 46%, 3% 31%, 19% 26%, 22% 10%, 38% 14%);
+}
+.vd-downsell-insignia strong { font-size: 1.8em; line-height: 1; }
+.vd-downsell-si { background: var(--vd-d-boton, #e11d48); color: var(--vd-d-texto-boton, #fff); }
+
+/* ─── Autocompletado de direcciones ─── */
+.vd-campo { position: relative; }
+.vd-sugerencias {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 6;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: #fff;
+  color: #111;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.15);
+}
+.vd-sugerencias[hidden] { display: none; }
+.vd-sugerencias li { padding: 10px 12px; cursor: pointer; font-size: 0.95em; }
+.vd-sugerencias li:hover { background: #f2f2f2; }
+
+/* ─── Código de verificación ─── */
+.vd-codigo-caja {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 24px;
+  padding: 24px 20px 20px;
+  border-radius: 16px;
+  background: #fff;
+  color: #111;
+  text-align: center;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.vd-codigo-caja h3 { margin: 0; font-size: 1.3em; }
+.vd-codigo-caja p { margin: 0; }
+.vd-codigo-caja input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 2px solid #111;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 1.6em;
+  letter-spacing: 0.4em;
+  text-align: center;
+}
+.vd-codigo-error { min-height: 1.2em; color: #d72c0d; font-size: 0.9em; }
+.vd-codigo-si { padding: 14px; border: 0; border-radius: 8px; background: #111; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.vd-codigo-reenviar { padding: 6px; border: 0; background: none; color: #1579ff; font: inherit; cursor: pointer; }
+.vd-codigo-reenviar:disabled { color: #888; cursor: default; }
+.vd-codigo-cerrar { position: absolute; top: 6px; right: 10px; border: 0; background: none; font-size: 1.6em; line-height: 1; cursor: pointer; color: #111; }

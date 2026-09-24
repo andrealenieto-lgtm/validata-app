@@ -1,0 +1,43 @@
+{% comment %}
+  Botón "Pedir ahora, pagar en casa" que abre el formulario contraentrega de Validata.
+  Se agrega en el editor de temas: Página de producto → Agregar bloque → Validata.
+{% endcomment %}
+<div
+  class="vd-cod"
+  data-ciudades="{{ 'colombia.json' | asset_url }}"
+  data-moneda="{{ cart.currency.iso_code }}"
+>
+  <script type="application/json">
+    {
+      "id": {{ product.id }},
+      "titulo": {{ product.title | json }},
+      "imagen": {{ product.featured_image | image_url: width: 200 | json }},
+      "variantes": [
+        {%- for v in product.variants -%}
+          { "id": {{ v.id }}, "titulo": {{ v.title | json }}, "precio": {{ v.price }}, "comparacion": {{ v.compare_at_price | default: 0 }}, "disponible": {{ v.available }} }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+  {%- comment -%} Texto y estilo finales vienen del Constructor de formularios de Validata. {%- endcomment -%}
+  <button type="button" class="vd-boton">
+    <span class="vd-boton-texto">Pedir ahora - Pagar en casa</span>
+  </button>
+</div>
+
+{{ 'formulario.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'formulario.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Validata - Contraentrega",
+  "target": "section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "El texto, los colores y los campos se configuran en la app Validata → Constructor de formularios."
+    }
+  ]
+}
+{% endschema %}

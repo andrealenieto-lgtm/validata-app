@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id                  String    @id
+  shop                String
+  state               String
+  isOnline            Boolean   @default(false)
+  scope               String?
+  expires             DateTime?
+  accessToken         String
+  userId              BigInt?
+  firstName           String?
+  lastName            String?
+  email               String?
+  accountOwner        Boolean   @default(false)
+  locale              String?
+  collaborator        Boolean?  @default(false)
+  emailVerified       Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+// Configuración de cada tienda. Cada campo guarda JSON (SQLite no tiene tipo Json);
+// se lee siempre a través de las funciones normalizar* de app/lib.
+model Tienda {
+  shop          String   @id
+  validacion    String   @default("{}") // Ajustes (app/lib/reglas/ajustes.ts)
+  modoHuella    String   @default("detalle_verificado")
+  formulario    String   @default("{}") // ConfigFormulario
+  configuracion String   @default("{}") // Visibilidad, fraude, píxeles, general
+  mensajeria    String   @default("{}")
+  plan          String   @default("gratis")
+  intervalo     String   @default("mensual")
+  updatedAt     DateTime @updatedAt
+}
+
+// Historial propio de la tienda: pedidos importados (CSV de Dropi) o de Shopify.
+model HistorialPedido {
+  id         Int       @id @default(autoincrement())
+  shop       String
+  telefono   String // E.164
+  referencia String
+  estado     String
+  fecha      DateTime?
+  origen     String    @default("csv")
+
+  @@unique([shop, origen, referencia])
+  @@index([shop, telefono])
+}
+
+// Eventos para Análisis (apertura, pedido, validacion).
+model Evento {
+  id        Int      @id @default(autoincrement())
+  shop      String
+  tipo      String
+  datos     String   @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([shop, createdAt])
+}
+
+// Códigos de verificación de teléfono. Solo se guarda el hash.
+model Otp {
+  shop      String
+  telefono  String
+  hash      String
+  creado    DateTime
+  intentos  Int      @default(0)
+
+  @@id([shop, telefono])
+}
+
+// Huella de Dropi (historial del comprador en toda la red Dropi) capturada por el agente
+// confirmador en las órdenes de la propia tienda. Es una foto: se actualiza en cada sincronización.
+model HuellaDropi {
+  shop         String
+  telefono     String // E.164
+  entregas     Int
+  devoluciones Int
+  capturada    DateTime
+
+  @@id([shop, telefono])
+}
+
+// Ofertas por cantidad (estilo Kaching). `datos` guarda la OfertaCantidad normalizada.
+model Oferta {
+  id        String   @id @default(cuid())
+  shop      String
+  datos     String   @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([shop])
+}
+
+// Paquetes / combos de varios productos. `datos` guarda el Paquete normalizado.
+model Paquete {
+  id        String   @id @default(cuid())
+  shop      String
+  datos     String   @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([shop])
+}
+
+// Formularios que el cliente dejó a medias (con teléfono válido), para el recordatorio de
+// carrito abandonado. Uno por teléfono: se actualiza si vuelve a intentarlo.
+model Borrador {
+  shop        String
+  telefono    String // E.164
+  nombre      String   @default("")
+  producto    String   @default("")
+  ruta        String   @default("") // ruta del producto en la tienda, p. ej. /products/crema
+  actualizado DateTime @default(now())
+  completado  Boolean  @default(false)
+  recordado   Boolean  @default(false)
+
+  @@id([shop, telefono])
+  @@index([completado, recordado, actualizado])
+}
